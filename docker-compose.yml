@@ -3,10 +3,11 @@ version: '3.8'
 services:
   web:
     build: .
-    command: poetry run python manage.py runserver 0.0.0.0:8000
+    command: poetry run python manage.py runserver ${HOST}:${PORT}
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - "${EXTERNAL_PORT}:${PORT}"
     env_file:
       - .env
+    restart: unless-stopped

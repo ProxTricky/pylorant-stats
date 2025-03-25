@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import motor.motor_asyncio
 
 load_dotenv()
 
@@ -61,17 +62,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'valorant_stats.wsgi.application'
 
+# Configuration MongoDB avec motor (async)
+MONGODB_CLIENT = motor.motor_asyncio.AsyncIOMotorClient(
+    os.getenv('MONGODB_URL'),
+    serverSelectionTimeoutMS=5000
+)
+MONGODB_DB = MONGODB_CLIENT[os.getenv('MONGODB_DB_NAME', 'valorant_stats')]
+
+# Configuration Django standard (SQLite pour les sessions et l'admin)
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': os.getenv('MONGODB_DB_NAME', 'valorant_stats'),
-        'CLIENT': {
-            'host': os.getenv('MONGODB_URL'),
-            'username': os.getenv('MONGODB_USER'),
-            'password': os.getenv('MONGODB_PASSWORD'),
-            'authSource': 'admin',
-            'authMechanism': 'SCRAM-SHA-1',
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
