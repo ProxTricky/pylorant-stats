@@ -8,11 +8,12 @@ authors = ["Your Name <your.email@example.com>"]
 python = "^3.9"
 django = "^4.2.7"
 django-ninja-extra = "^0.19.1"
-django-allauth = "^0.58.2"
 pymongo = "^4.6.1"
 requests = "^2.31.0"
 python-dotenv = "^1.0.0"
 gunicorn = "^21.2.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+auth0-python = "^4.4.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.11.0"
