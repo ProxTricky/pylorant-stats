@@ -64,9 +64,13 @@ WSGI_APPLICATION = 'valorant_stats.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': os.getenv('DB_NAME', 'valorant_stats'),
+        'NAME': os.getenv('MONGODB_DB_NAME', 'valorant_stats'),
         'CLIENT': {
-            'host': os.getenv('MONGODB_URL', 'mongodb://localhost:27017/'),
+            'host': os.getenv('MONGODB_URL'),
+            'username': os.getenv('MONGODB_USER'),
+            'password': os.getenv('MONGODB_PASSWORD'),
+            'authSource': 'admin',
+            'authMechanism': 'SCRAM-SHA-1',
         }
     }
 }
