@@ -1,11 +1,11 @@
 # Valorant Stats Dashboard
 
-Personal Valorant statistics dashboard with MongoDB and Django. Features Google SSO authentication and HenrikDev API integration.
+Personal Valorant statistics dashboard with MongoDB and Django. Features Auth0 authentication and HenrikDev API integration.
 
 ## 🚀 Features
 
 - Personal statistics dashboard for Valorant
-- Google SSO authentication (restricted to specific email)
+- Secure Auth0 authentication (email-restricted access)
 - Match history tracking
 - Performance statistics
 - API caching system
@@ -14,10 +14,10 @@ Personal Valorant statistics dashboard with MongoDB and Django. Features Google 
 ## 🛠️ Tech Stack
 
 - **Backend**: Django + Django Ninja Extra
-- **Database**: MongoDB
-- **Authentication**: Google OAuth via django-allauth
+- **Database**: MongoDB (external)
+- **Authentication**: Auth0
 - **Package Management**: Poetry
-- **Containerization**: Docker & Docker Compose
+- **Containerization**: Docker
 - **API Integration**: HenrikDev Valorant API
 
 ## 📋 Prerequisites
@@ -25,8 +25,9 @@ Personal Valorant statistics dashboard with MongoDB and Django. Features Google 
 - Python 3.9+
 - Docker and Docker Compose
 - Poetry for dependency management
-- Google OAuth credentials
+- Auth0 account and credentials
 - HenrikDev API key
+- External MongoDB instance
 
 ## 🔧 Installation
 
@@ -59,33 +60,45 @@ Personal Valorant statistics dashboard with MongoDB and Django. Features Google 
 
 ## ⚙️ Configuration
 
-1. **Google OAuth Setup**
-   - Go to [Google Cloud Console](https://console.cloud.google.com)
-   - Create a new project
-   - Enable Google+ API
-   - Create OAuth 2.0 credentials
-   - Add authorized redirect URIs:
-     - `http://localhost:8000/accounts/google/login/callback/`
-   - Copy Client ID and Secret to `.env`
+1. **Auth0 Setup**
+   - Create an account on [Auth0](https://auth0.com)
+   - Create a new Regular Web Application
+   - Configure your application settings
+   - Add your allowed email in the settings
+   - Copy credentials to `.env`
 
 2. **HenrikDev API**
    - Get your API key from [HenrikDev](https://henrikdev.xyz)
    - Add it to `.env`
 
-3. **Environment Variables**
+3. **MongoDB Configuration**
+   - Configure your external MongoDB connection
+   - Update MongoDB credentials in `.env`
+
+4. **Environment Variables**
    ```env
+   # Django
    SECRET_KEY=your-django-secret-key
    DEBUG=True
    ALLOWED_HOSTS=localhost,127.0.0.1
-   
-   MONGODB_URL=mongodb://mongodb:27017/
-   DB_NAME=valorant_stats
-   
+
+   # MongoDB External
+   MONGODB_URL=mongodb://user:password@your-mongo-host:27017/
+   MONGODB_DB_NAME=valorant_stats
+   MONGODB_USER=your-mongo-user
+   MONGODB_PASSWORD=your-mongo-password
+   MONGODB_HOST=your-mongo-host
+   MONGODB_PORT=27017
+
+   # Valorant API
    HENRIK_API_KEY=your-henrik-api-key
-   
-   GOOGLE_CLIENT_ID=your-google-client-id
-   GOOGLE_CLIENT_SECRET=your-google-client-secret
-   GOOGLE_ALLOWED_EMAIL=your.email@gmail.com
+
+   # Auth0 Configuration
+   AUTH0_DOMAIN=your-tenant.auth0.com
+   AUTH0_CLIENT_ID=your-client-id
+   AUTH0_CLIENT_SECRET=your-client-secret
+   AUTH0_AUDIENCE=your-api-identifier
+   AUTH0_ALLOWED_EMAIL=your.email@example.com
    ```
 
 ## 🚀 Development
@@ -95,26 +108,30 @@ Personal Valorant statistics dashboard with MongoDB and Django. Features Google 
    poetry run python manage.py migrate
    ```
 
-2. **Create superuser**
-   ```bash
-   poetry run python manage.py createsuperuser
-   ```
-
-3. **Run development server**
+2. **Run development server**
    ```bash
    poetry run python manage.py runserver
    ```
 
 ## 🐳 Docker
 
-The application is fully dockerized with two services:
-- `web`: Django application
-- `mongodb`: MongoDB database
+The application is dockerized with:
+- Django web application
+- External MongoDB connection
+- Environment configuration via .env
 
 To run with Docker:
 ```bash
 docker-compose up --build
 ```
+
+## 🔒 Security
+
+- Auth0 authentication with JWT tokens
+- Email restriction for access control
+- Secure API endpoints with token verification
+- MongoDB authentication
+- Environment variable protection
 
 ## 📝 License
 
