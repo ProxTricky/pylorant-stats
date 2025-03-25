@@ -38,7 +38,7 @@ RUN poetry install --only main --no-root
 COPY . .
 
 # Exposer le port
-EXPOSE 8000
+EXPOSE 8007
 
 # Commande par défaut
-CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8007"]
