@@ -63,11 +63,29 @@ TEMPLATES = [
 WSGI_APPLICATION = 'valorant_stats.wsgi.application'
 
 # Configuration MongoDB avec motor (async)
-MONGODB_CLIENT = motor.motor_asyncio.AsyncIOMotorClient(
-    os.getenv('MONGODB_URL'),
-    serverSelectionTimeoutMS=5000
-)
-MONGODB_DB = MONGODB_CLIENT[os.getenv('MONGODB_DB_NAME', 'valorant_stats')]
+MONGODB_URL = os.getenv('MONGODB_URL')
+if not MONGODB_URL:
+    # Construire l'URL à partir des composants
+    MONGODB_USER = os.getenv('MONGODB_USER', '')
+    MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD', '')
+    MONGODB_HOST = os.getenv('MONGODB_HOST', 'localhost')
+    MONGODB_PORT = os.getenv('MONGODB_PORT', '27017')
+    MONGODB_DB = os.getenv('MONGODB_DB_NAME', 'valorant_stats')
+    
+    auth_string = f"{MONGODB_USER}:{MONGODB_PASSWORD}@" if MONGODB_USER and MONGODB_PASSWORD else ""
+    MONGODB_URL = f"mongodb://{auth_string}{MONGODB_HOST}:{MONGODB_PORT}/{MONGODB_DB}"
+
+try:
+    MONGODB_CLIENT = motor.motor_asyncio.AsyncIOMotorClient(
+        MONGODB_URL,
+        serverSelectionTimeoutMS=5000
+    )
+    MONGODB_DB = MONGODB_CLIENT.get_database()
+except Exception as e:
+    print(f"Error connecting to MongoDB: {e}")
+    print(f"MongoDB URL (secrets hidden): mongodb://<user>:<pass>@{MONGODB_HOST}:{MONGODB_PORT}/{MONGODB_DB}")
+    MONGODB_CLIENT = None
+    MONGODB_DB = None
 
 # Configuration Django standard (SQLite pour les sessions et l'admin)
 DATABASES = {
