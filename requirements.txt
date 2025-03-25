@@ -1,5 +1,6 @@
 django==4.2.7
 django-ninja-extra==0.19.1
+django-allauth==0.57.0
 pymongo[srv]==4.6.1
 motor==3.3.2
 requests==2.31.0
