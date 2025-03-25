@@ -66,13 +66,20 @@ WSGI_APPLICATION = 'valorant_stats.wsgi.application'
 MONGODB_URL = os.getenv('MONGODB_URL')
 if not MONGODB_URL:
     # Construire l'URL à partir des composants
+    from urllib.parse import quote_plus
+
     MONGODB_USER = os.getenv('MONGODB_USER', '')
     MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD', '')
     MONGODB_HOST = os.getenv('MONGODB_HOST', 'localhost')
     MONGODB_PORT = os.getenv('MONGODB_PORT', '27017')
     MONGODB_DB = os.getenv('MONGODB_DB_NAME', 'valorant_stats')
     
-    auth_string = f"{MONGODB_USER}:{MONGODB_PASSWORD}@" if MONGODB_USER and MONGODB_PASSWORD else ""
+    # Encoder les credentials pour gérer les caractères spéciaux
+    if MONGODB_USER and MONGODB_PASSWORD:
+        auth_string = f"{quote_plus(MONGODB_USER)}:{quote_plus(MONGODB_PASSWORD)}@"
+    else:
+        auth_string = ""
+        
     MONGODB_URL = f"mongodb://{auth_string}{MONGODB_HOST}:{MONGODB_PORT}/{MONGODB_DB}"
 
 try:
