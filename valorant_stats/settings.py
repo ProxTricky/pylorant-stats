@@ -141,3 +141,12 @@ ALLOWED_EMAIL = os.getenv('GOOGLE_ALLOWED_EMAIL')
 
 # Custom adapter to restrict access
 SOCIALACCOUNT_ADAPTER = 'stats.adapters.CustomSocialAccountAdapter'
+
+# Security settings
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://pylorant.proxtricky.fr'
+]

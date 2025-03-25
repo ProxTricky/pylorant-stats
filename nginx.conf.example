@@ -1,6 +1,6 @@
 server {
     listen 443 ssl;
-    server_name your-domain.fr;
+    server_name pylorant.proxtricky.fr;
 
     ssl_certificate /path/to/your/fullchain.pem;
     ssl_certificate_key /path/to/your/privkey.pem;
@@ -15,7 +15,7 @@ server {
 
     # Proxy settings
     location / {
-        proxy_pass http://your-lxc-ip:8000;
+        proxy_pass http://your-lxc-ip:8007;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -24,6 +24,11 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Augmenter les timeouts pour éviter la bad gateway
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
     }
 
     # Security headers
