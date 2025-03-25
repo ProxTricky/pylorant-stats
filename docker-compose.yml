@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     build: .
-    command: poetry run python manage.py runserver 0.0.0.0:8007
+    command: python manage.py runserver 0.0.0.0:8007
     volumes:
       - .:/app
     ports:
